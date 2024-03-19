@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cinema_management.AdminController">
+   <children>
+      <TabPane prefHeight="859.0" prefWidth="1234.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Homepage">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="517.0" layoutY="301.0" text="Vous êtes connecté en tant qu'admin " />
+                        <Label layoutX="469.0" layoutY="344.0" text="changez d'onglet pour accéder aux fonction des onglets" />
+                        <Label layoutX="397.0" layoutY="407.0" text="Chaque onglet vous permet d'ajouter,voir, modifier ou supprimer l'élément choissit" />
+                        <Label layoutX="469.0" layoutY="469.0" text="appuyez içi pour vous déconnecter :" />
+                        <Button fx:id="deconnection" layoutX="692.0" layoutY="465.0" mnemonicParsing="false" onAction="#OnDeconnection" text="déconnection" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+          <Tab text="Employé">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <GridPane layoutX="247.0" layoutY="56.0" prefHeight="270.0" prefWidth="619.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="344.0" minWidth="10.0" prefWidth="223.5" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="348.5" minWidth="10.0" prefWidth="348.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Veuillez rentrer son nom d'utilisateur  :" />
+                              <Label text="Veuillez rentrer son mot de passe  :" GridPane.rowIndex="1" />
+                              <TextField fx:id="newUsername" GridPane.columnIndex="1" />
+                              <TextField fx:id="newPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="ButtonNewEmpoyee" mnemonicParsing="false" onAction="#OnAddEmployee" text="valider" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                           </children>
+                        </GridPane>
+                        <Label fx:id="errorLabel" layoutX="891.0" layoutY="91.0" textFill="#fa0c0c" visible="false" />
+                        <Label layoutX="557.0" layoutY="39.0" text="Remplissez les information pour ajouter un utilisateur" />
+                        <Line endX="1133.0" layoutX="101.0" layoutY="289.0" startX="-100.0" />
+                        <Label layoutX="535.0" layoutY="326.0" text="Renseigner le nom d'utilisateur que vous souhaitez supprimer" />
+                        <GridPane layoutX="256.0" layoutY="398.0" prefHeight="163.0" prefWidth="619.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="344.0" minWidth="10.0" prefWidth="308.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="348.5" minWidth="10.0" prefWidth="311.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="309.0" text="Veuillez rentrer son nom d'utilisateur  à supprimer  :" />
+                              <TextField fx:id="usernameToDelete" GridPane.columnIndex="1" />
+                              <Button fx:id="ButtonNewEmpoyee1" mnemonicParsing="false" onAction="#OnDeleteEmployee" text="valider" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                           </children>
+                        </GridPane>
+                        <Label fx:id="deleteMessage" layoutX="891.0" layoutY="430.0" visible="false" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Film">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane layoutX="316.0" layoutY="91.0" prefHeight="264.0" prefWidth="603.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="61.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="88.5" minHeight="10.0" prefHeight="87.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label contentDisplay="CENTER" text="Remplir le titre du film à ajouter   :" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <Label text="Renseignez le directeur du film   :" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                              <Label text="Ajouter la description du film   :" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                              <Label text="Duréé du film en minutes   :" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                              <TextField fx:id="FilmTitleAdd" GridPane.columnIndex="1" />
+                              <TextField fx:id="FilmDirectorAdd" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="FilmDurationAdd" onAction="#OnAddFilm" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextArea fx:id="FilmDescAdd" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <Label layoutX="578.0" layoutY="42.0" text="Ajouter un film" />
+                        <Button fx:id="FilmButtonAdd" layoutX="1017.0" layoutY="211.0" mnemonicParsing="false" onAction="#OnAddFilm" text="ajouter" />
+                        <Label layoutX="576.0" layoutY="407.0" text="Archiver un film" />
+                        <Label layoutX="375.0" layoutY="478.0" text="Saissez le titre du film à archiver  :" />
+                        <Line endX="1155.0" layoutX="79.0" layoutY="355.0" startX="-100.0" />
+                        <TextField fx:id="FilmTitleArchived" layoutX="617.0" layoutY="474.0" prefHeight="25.0" prefWidth="305.0" />
+                        <Button fx:id="FilmButtonArchived" layoutX="744.0" layoutY="533.0" mnemonicParsing="false" onAction="#OnArchivedFilm" text="archiver" />
+                        <Label fx:id="FilmMessageArchived" layoutX="1003.0" layoutY="478.0" visible="false" />
+                        <Label fx:id="FilmMessageAdd" layoutX="1030.0" layoutY="144.0" visible="false" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

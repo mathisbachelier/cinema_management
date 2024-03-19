@@ -23,47 +23,49 @@ public class MainController {
     public Boolean login() throws SQLException {
 
         ResultSet rl = new Query().getEmployee();
-        Boolean check = false;
+        boolean validLogin = false;
 
         // Replace with actual password input
         while (rl.next()) {
             String login_username = rl.getString("username");
             String login_password = rl.getString("password");
-            int login_id = rl.getInt("employee_id");
+            int login_id = rl.getInt("id");
             // Check if the username and password are valid
-            if (login_username.equals(username.getText())) {
-                if (login_password.equals(password.getText())) {
-                    // Successful login, add your logic here
-                    System.out.println("worked!");
-                    check = true;
+            if (login_username.equals(username.getText()) && login_password.equals(password.getText())) {
+                if (login_id == 1) {
+                    validLogin = true;
                     Stage stage = (Stage) username.getScene().getWindow();
-                    FXMLLoader fxmlIndex = new FXMLLoader(getClass().getResource("index.fxml"));
+                    FXMLLoader fxmlAdmin = new FXMLLoader(getClass().getResource("admin.fxml"));
                     try {
-                        Scene scene = new Scene(fxmlIndex.load(), 800, 600);
+                        Scene scene = new Scene(fxmlAdmin.load(), 1200, 800);
                         stage.setScene(scene);
                         stage.setTitle("CinéGest");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    return check;
-
                 } else {
-                    System.out.println("didn't work");
-                    return check;
+                    // Successful login, add your logic here
+                    validLogin = true;
+
+                    Stage stage = (Stage) username.getScene().getWindow();
+                    FXMLLoader fxmlIndex = new FXMLLoader(getClass().getResource("index.fxml"));
+                    try {
+                        Scene scene = new Scene(fxmlIndex.load(), 1200, 800);
+                        stage.setScene(scene);
+                        stage.setTitle("CinéGest");
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } else {
-                System.out.println("didn't work");
-                return check;
-
-
             }
-        }
-        return check;
 
-    }
-    public String getUsername() {
-        return username.getText();
+        }if(!validLogin) {
+            System.out.println("didn't work");
+        }
+
+        return validLogin;
     }
 
 }

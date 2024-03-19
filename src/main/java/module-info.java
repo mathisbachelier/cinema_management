@@ -7,6 +7,7 @@ module com.example.cinema_management {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires java.desktop;
 
     opens com.example.cinema_management to javafx.fxml;
     exports com.example.cinema_management;
