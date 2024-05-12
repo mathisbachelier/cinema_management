@@ -7,7 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
+
 
 import javax.swing.*;
 import java.io.IOException;
@@ -15,6 +15,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import javafx.event.EventTarget;
+
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -48,6 +56,34 @@ public class AdminController {
     @FXML
     private Label FilmMessageAdd;
     @FXML
+    private TextField FilmToUnarchive;
+    @FXML
+    private Label FilmUnarchiveMessage;
+    @FXML
+    private TextField SceanceFilmTitleAdd;
+    @FXML
+    private DatePicker SceanceHeureAdd;
+    @FXML
+    private TextField sceancehouradd;
+    @FXML
+    private TextField SceanceRoomAdd;
+    @FXML
+    private TextField RoomNumberAdd;
+    @FXML
+    private TextField RoomCapacityAdd;
+    @FXML
+    private Label RoomMessageAdd;
+    @FXML
+    private Label SceanceMessageAdd;
+    @FXML
+    private TextField RoomToArchive;
+    @FXML
+    private Label RoomMessageArchived;
+    @FXML
+    private TextField RoomToUnarchive;
+    @FXML
+    private Label RoomMessageUnarchived;
+    @FXML
     private TableView<Employee> employeeTable;
     private SortEvent<TableView<List<Employee>>> employees;
 
@@ -73,7 +109,7 @@ public class AdminController {
         Query query = new Query();
         ResultSet rs = query.getEmployeeUsernames();
         if (newUsername.getText().isEmpty() || newPassword.getText().isEmpty()) {
-            errorLabel.setText("Please fill in both fields.");
+            errorLabel.setText("Veuillez remplir tous les champs");
             errorLabel.setVisible(true);
             CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
                 SwingUtilities.invokeLater(() -> {
@@ -85,7 +121,7 @@ public class AdminController {
                 while (rs.next()) {
                     String existingUsername = rs.getString("username");
                     if (existingUsername.equals(username)) {
-                        System.out.println("Username already in use. Please choose a different username.");
+
                         errorLabel.setText("Usernane déjà utilisé. Veuillez en prendre un autre.");
                         errorLabel.setVisible(true);
                         CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
@@ -112,7 +148,7 @@ public class AdminController {
             System.out.println(n);
 
             query.AddEmployee(newEmployee);
-            errorLabel.setText("Employee added successfully");
+            errorLabel.setText("Employer ajouté avec succès");
             errorLabel.setVisible(true);
             CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
                 SwingUtilities.invokeLater(() -> {
@@ -147,7 +183,7 @@ public class AdminController {
         boolean isDeleted = query.deleteEmployee(username);
 
         if (isDeleted) {
-            deleteMessage.setText("Successfully deleted");
+            deleteMessage.setText("Employer supprimé avec succès");
         } else {
             deleteMessage.setText("Username inexistant");
         }
@@ -169,7 +205,7 @@ public class AdminController {
         String duration = FilmDurationAdd.getText();
         String description = FilmDescAdd.getText();
         if (title.isEmpty() || director.isEmpty() || duration.isEmpty() || description.isEmpty()) {
-            FilmMessageAdd.setText("Please fill in all fields.");
+            FilmMessageAdd.setText("Veuillez remplir tous les champs");
             FilmMessageAdd.setVisible(true);
             CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
                 SwingUtilities.invokeLater(() -> {
@@ -198,7 +234,6 @@ public class AdminController {
                     });
                 });
             } catch (NumberFormatException e) {
-                // Show error message for non-integer duration
                 FilmMessageAdd.setText("Duration must be an integer");
                 FilmMessageAdd.setVisible(true);
                 CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
@@ -213,13 +248,23 @@ public class AdminController {
         Query query = new Query();
         Film film = new Film();
         String title = FilmTitleArchived.getText();
+        if (title.isEmpty()) {
+            FilmMessageArchived.setText("Please enter a film title");
+            FilmMessageArchived.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    FilmMessageArchived.setVisible(false);
+                });
+            });
+            return;
+        }
         film.setTitle(title);
         boolean isArchived = query.archivedFilm(title);
 
         if (isArchived) {
             FilmMessageArchived.setText("Film archived");
         } else {
-            FilmMessageArchived.setText("Film doesn't exist");
+            FilmMessageArchived.setText("Film not found or error occurred");
         }
         FilmMessageArchived.setVisible(true);
 
@@ -228,6 +273,241 @@ public class AdminController {
                 FilmMessageArchived.setVisible(false);
             });
         });
+    }
+    public void OnFilmToUnarchive() {
+        Query query = new Query();
+        Film film = new Film();
+        String title = FilmToUnarchive.getText();
+        if (title.isEmpty()) {
+            FilmUnarchiveMessage.setText("Please enter a film title");
+            FilmUnarchiveMessage.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    FilmUnarchiveMessage.setVisible(false);
+                });
+            });
+            return;
+        }
+        film.setTitle(title);
+        boolean isArchived = query.UnarchivedFilm(title);
+
+        if (isArchived) {
+            FilmUnarchiveMessage.setText("Film Unarchived");
+        } else {
+            FilmUnarchiveMessage.setText("Film not found or error occurred");
+        }
+        FilmUnarchiveMessage.setVisible(true);
+
+        CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+            SwingUtilities.invokeLater(() -> {
+                FilmUnarchiveMessage.setVisible(false);
+            });
+        });
+    }
+
+    public void OnAddSceance() throws ParseException {
+        Query query = new Query();
+        Screening sceance = new Screening();
+        String title = SceanceFilmTitleAdd.getText();
+        LocalDate date = SceanceHeureAdd.getValue();
+        String hour = sceancehouradd.getText();
+        String room = SceanceRoomAdd.getText();
+
+
+
+        if (title.isEmpty() || date == null || room.isEmpty() || hour.isEmpty()) {
+
+            SceanceMessageAdd.setText("veuillez remplir tout les champs");
+            SceanceMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    SceanceMessageAdd.setVisible(false);
+                });
+            });
+            return;
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime time = LocalTime.parse(hour, formatter);
+            String hourFormat = time.toString();
+        } catch (DateTimeParseException e) {
+            SceanceMessageAdd.setText("L'heure rentrée n'est pas valide");
+            SceanceMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    SceanceMessageAdd.setVisible(false);
+                });
+            });
+            return;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime time = LocalTime.parse(hour, formatter);
+        String hourFormat = time.toString();
+
+        sceance.setMovieId(Query.getMovieId(title));
+        sceance.setRoomNumber(Query.getRoomId(room));
+        sceance.setStartTime(date.toString());
+        sceance.setStartHour(hourFormat);
+        sceance.setDuration(Query.getDuration(title));
+
+        if (query.getFilmIsArchived(sceance.getMovieId())) {
+
+            SceanceMessageAdd.setText("can't add screening, Film is archived");
+            SceanceMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    SceanceMessageAdd.setVisible(false);
+                });
+            });
+            return;
+        }
+        if (query.getRoomIsArchived(sceance.getRoomNumber())) {
+
+            SceanceMessageAdd.setText("can't add screening, room is archived");
+            SceanceMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    SceanceMessageAdd.setVisible(false);
+                });
+            });
+            return;
+        }
+
+        boolean isAdded = query.addScreening(sceance);
+
+        if (isAdded) {
+
+            SceanceMessageAdd.setText("sceance added");
+            SceanceMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    SceanceMessageAdd.setVisible(false);
+                });
+            });
+        }
+        else {
+
+            SceanceMessageAdd.setText("sceance existe déjà ou informations erronées");
+            SceanceMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    SceanceMessageAdd.setVisible(false);
+                });
+            });
+        }
+    }
+
+    public void OnAddRoom() {
+        Query query = new Query();
+        Room room = new Room();
+        String roomNumber = RoomNumberAdd.getText();
+        String capacity = RoomCapacityAdd.getText();
+
+        if (roomNumber.isEmpty() || capacity.isEmpty()) {
+            RoomMessageAdd.setText("veuillez remplir tout les champs");
+            RoomMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageAdd.setVisible(false);
+                });
+            });
+            return;
+        }
+
+        room.setRoomNumber(roomNumber);
+        room.setCapacity(Integer.parseInt(capacity));
+        boolean roomAdded = query.addRoom(room);
+
+        if (roomAdded) {
+
+            RoomMessageAdd.setText("La salle a été ajoutée");
+            RoomMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageAdd.setVisible(false);
+                });
+            });
+        } else {
+            RoomMessageAdd.setText("La salle existe déjà ou informations erronées");
+            RoomMessageAdd.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageAdd.setVisible(false);
+                });
+            });
+        }
+    }
+    public void onRoomToArchive() {
+        Query query = new Query();
+        String roomNumber = RoomToArchive.getText();
+
+        if (roomNumber.isEmpty()) {
+            RoomMessageArchived.setText("Veuillez entrer le numero de la salle");
+            RoomMessageArchived.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageArchived.setVisible(false);
+                });
+            });
+            return;
+        }
+
+        boolean roomArchived = query.roomToArchive(roomNumber);
+
+        if (roomArchived) {
+
+            RoomMessageArchived.setText("Salle archivée");
+            RoomMessageArchived.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageArchived.setVisible(false);
+                });
+            });
+        } else {
+            RoomMessageArchived.setText("La salle n'existe pas ou informations erronées");
+            RoomMessageArchived.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageArchived.setVisible(false);
+                });
+            });
+        }
+    }
+    public void onRoomToUnarchive() {
+        Query query = new Query();
+        String roomNumber = RoomToUnarchive.getText();
+
+        if (roomNumber.isEmpty()) {
+            RoomMessageUnarchived.setText("Veuillez entrer le numero de la salle");
+            RoomMessageUnarchived.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageUnarchived.setVisible(false);
+                });
+            });
+            return;
+        }
+
+        boolean roomUnarchived = query.roomToUnarchive(roomNumber);
+
+        if (roomUnarchived) {
+
+            RoomMessageUnarchived.setText("Salle non archivée");
+            RoomMessageUnarchived.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageUnarchived.setVisible(false);
+                });
+            });
+        } else {
+            RoomMessageUnarchived.setText("La salle n'existe pas ou informations erronées");
+            RoomMessageUnarchived.setVisible(true);
+            CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS).execute(() -> {
+                SwingUtilities.invokeLater(() -> {
+                    RoomMessageUnarchived.setVisible(false);
+                });
+            });
+        }
     }
 
 

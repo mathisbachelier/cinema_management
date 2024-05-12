@@ -30,7 +30,7 @@ public class MainController {
             String login_username = rl.getString("username");
             String login_password = rl.getString("password");
             int login_id = rl.getInt("id");
-            // Check if the username and password are valid
+
             if (login_username.equals(username.getText()) && login_password.equals(password.getText())) {
                 if (login_id == 1) {
                     validLogin = true;
@@ -44,7 +44,6 @@ public class MainController {
                         e.printStackTrace();
                     }
                 } else {
-                    // Successful login, add your logic here
                     validLogin = true;
 
                     Stage stage = (Stage) username.getScene().getWindow();
