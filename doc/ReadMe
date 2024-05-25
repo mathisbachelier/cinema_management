@@ -1,0 +1,15 @@
+Compte Admin:
+
+Dans la table employee l'admin est celui dont le rôle est égal à 1 les mots de passes ne sont pas hashé car rentré directement via phpmyadmin.
+
+Compte employer: 
+
+Tout les autres.
+
+
+
+Utilisation : 
+
+En fonction des rôles les utilisations sont différentes et les fenêtres d'affichage aussi.
+Pour tout la gestions des Salle, employers, Scéances, etc ... , se connecter en tant qu'admin.
+Pour faire des réservations se connecter en tant qu'employer.  
